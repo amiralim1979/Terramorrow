@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindCarer — Support for Family Caregivers</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --forest: #1E3A2F;
+    --sage:   #4A7C59;
+    --mist:   #C8DDD0;
+    --cream:  #F5F0E8;
+    --warm:   #E8DDD0;
+    --text:   #1A1A1A;
+    --soft:   #5A5A5A;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: rgba(245,240,232,0.95);
+    backdrop-filter: blur(8px);
+    padding: 16px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 100;
+    border-bottom: 1px solid var(--mist);
+  }
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--forest);
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--sage); font-style: italic; }
+  nav a {
+    font-size: 14px; font-weight: 500;
+    color: var(--forest); text-decoration: none;
+    background: var(--forest); color: white;
+    padding: 10px 22px; border-radius: 100px;
+    transition: background 0.2s;
+  }
+  nav a:hover { background: var(--sage); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    background: linear-gradient(160deg, var(--cream) 0%, #E8F0EC 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(74,124,89,0.08) 0%, transparent 70%);
+    top: 10%; right: -10%;
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(200,221,208,0.3) 0%, transparent 70%);
+    bottom: 10%; left: -5%;
+    pointer-events: none;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--sage);
+    background: rgba(74,124,89,0.1);
+    padding: 6px 16px; border-radius: 100px;
+    margin-bottom: 28px;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(36px, 6vw, 68px);
+    color: var(--forest);
+    line-height: 1.1;
+    letter-spacing: -1px;
+    max-width: 780px;
+    margin-bottom: 24px;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--sage);
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 19px);
+    color: var(--soft);
+    max-width: 560px;
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: 48px;
+  }
+
+  .stat-row {
+    display: flex; gap: 40px; flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 52px;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: var(--forest);
+    display: block;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--soft);
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
+
+  .hero-cta {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+  .btn-primary {
+    background: var(--forest);
+    color: white;
+    padding: 16px 36px;
+    border-radius: 100px;
+    font-size: 15px; font-weight: 500;
+    text-decoration: none;
+    border: none; cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--sage); transform: translateY(-1px); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--forest);
+    padding: 16px 36px;
+    border-radius: 100px;
+    font-size: 15px; font-weight: 500;
+    text-decoration: none;
+    border: 2px solid var(--mist);
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--sage); }
+
+  /* PROBLEM */
+  .section { padding: 100px 24px; }
+  .container { max-width: 1040px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--sage); margin-bottom: 16px;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 44px);
+    color: var(--forest);
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+    max-width: 600px;
+  }
+
+  .lead {
+    font-size: 18px;
+    color: var(--soft);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 580px;
+    margin-bottom: 48px;
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .problem-card {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    border: 1px solid var(--mist);
+  }
+  .problem-icon {
+    font-size: 28px; margin-bottom: 16px;
+  }
+  .problem-card h3 {
+    font-size: 16px; font-weight: 600;
+    color: var(--forest); margin-bottom: 10px;
+  }
+  .problem-card p {
+    font-size: 14px; color: var(--soft); line-height: 1.6;
+  }
+
+  /* QUOTE */
+  .quote-section {
+    background: var(--forest);
+    padding: 80px 24px;
+    text-align: center;
+  }
+  blockquote {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(22px, 3.5vw, 36px);
+    color: var(--mist);
+    max-width: 720px;
+    margin: 0 auto;
+    line-height: 1.4;
+    font-style: italic;
+  }
+  blockquote cite {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-size: 13px;
+    color: rgba(200,221,208,0.6);
+    margin-top: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* HOW IT WORKS */
+  .how-bg { background: var(--warm); }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+    margin-top: 56px;
+  }
+  .step {
+    position: relative;
+  }
+  .step-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 64px;
+    color: var(--mist);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .step h3 {
+    font-size: 17px; font-weight: 600;
+    color: var(--forest); margin-bottom: 10px;
+  }
+  .step p {
+    font-size: 14px; color: var(--soft); line-height: 1.6;
+  }
+
+  /* WHO */
+  .who-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    margin-top: 48px;
+  }
+  .who-list { list-style: none; }
+  .who-list li {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--mist);
+    font-size: 15px;
+    color: var(--text);
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .who-list li::before {
+    content: '→';
+    color: var(--sage);
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .who-card {
+    background: var(--forest);
+    border-radius: 20px;
+    padding: 40px;
+    color: white;
+  }
+  .who-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: var(--mist);
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+  .who-card p {
+    font-size: 14px;
+    color: rgba(200,221,208,0.8);
+    line-height: 1.7;
+  }
+  .who-card .tag {
+    display: inline-block;
+    background: rgba(200,221,208,0.15);
+    color: var(--mist);
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-top: 20px;
+    margin-right: 6px;
+  }
+
+  /* WAITLIST */
+  .waitlist-section {
+    background: linear-gradient(135deg, var(--forest) 0%, #2D5240 100%);
+    padding: 100px 24px;
+    text-align: center;
+  }
+  .waitlist-section h2 {
+    color: white;
+    margin: 0 auto 16px;
+  }
+  .waitlist-section .lead {
+    color: rgba(200,221,208,0.8);
+    margin: 0 auto 40px;
+  }
+
+  .waitlist-form {
+    display: flex;
+    gap: 12px;
+    max-width: 480px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .waitlist-form input {
+    flex: 1;
+    min-width: 260px;
+    padding: 16px 22px;
+    border-radius: 100px;
+    border: 2px solid rgba(200,221,208,0.3);
+    background: rgba(255,255,255,0.08);
+    color: white;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .waitlist-form input::placeholder { color: rgba(200,221,208,0.5); }
+  .waitlist-form input:focus { border-color: var(--mist); }
+  .waitlist-form button {
+    padding: 16px 32px;
+    background: var(--mist);
+    color: var(--forest);
+    border: none;
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .waitlist-form button:hover {
+    background: white;
+    transform: translateY(-1px);
+  }
+
+  .privacy-note {
+    font-size: 12px;
+    color: rgba(200,221,208,0.5);
+    margin-top: 16px;
+  }
+
+  .success-msg {
+    display: none;
+    background: rgba(200,221,208,0.15);
+    border: 1px solid rgba(200,221,208,0.3);
+    color: var(--mist);
+    padding: 16px 32px;
+    border-radius: 100px;
+    font-size: 15px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #0F1F16;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  footer .logo { font-size: 18px; color: var(--mist); display: block; margin-bottom: 12px; }
+  footer p { font-size: 13px; color: rgba(200,221,208,0.4); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .stat-row { gap: 24px; }
+    .who-grid { grid-template-columns: 1fr; }
+    .who-card { order: -1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Mind<span>Carer</span></div>
+  <a href="#waitlist">Join Waitlist</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="eyebrow">Coming to Finland — 2027</div>
+  <h1>You care for them.<br><em>Who cares for you?</em></h1>
+  <p class="hero-sub">
+    MindCarer is a clinically-designed mental health platform built exclusively
+    for family members caring for elderly relatives — the one million Finns carrying
+    this quietly, often alone.
+  </p>
+
+  <div class="stat-row">
+    <div class="stat">
+      <span class="stat-num">1M+</span>
+      <div class="stat-label">Family caregivers in Finland</div>
+    </div>
+    <div class="stat">
+      <span class="stat-num">64%</span>
+      <div class="stat-label">Report moderate-to-high stress</div>
+    </div>
+    <div class="stat">
+      <span class="stat-num">0</span>
+      <div class="stat-label">Apps designed for them specifically</div>
+    </div>
+  </div>
+
+  <div class="hero-cta">
+    <a href="#waitlist" class="btn-primary">Join the Waitlist</a>
+    <a href="#how" class="btn-secondary">How it works</a>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">The Problem</div>
+    <h2>Caregiving is invisible work — and it takes a real toll</h2>
+    <p class="lead">
+      General mental health apps were not built for you. They don't understand
+      anticipatory grief, role reversal, caregiver guilt, or what it means to
+      watch a parent slowly disappear.
+    </p>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon">🌑</div>
+        <h3>Burnout creeps in silently</h3>
+        <p>Caregiver burnout doesn't announce itself. It accumulates slowly — until one day you have nothing left to give.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🏚</div>
+        <h3>You feel completely alone</h3>
+        <p>1 in 4 caregivers report loneliness and social withdrawal. Few people around you truly understand what this is like.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">💊</div>
+        <h3>Guilt is constant</h3>
+        <p>The ambivalence of loving someone and resenting the situation is real — and almost no one talks about it.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📋</div>
+        <h3>No tool was built for this</h3>
+        <p>Headspace and Calm weren't designed for the emotional reality of caring for an aging parent. MindCarer is.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="quote-section">
+  <blockquote>
+    "I didn't realise I was burned out until I couldn't feel anything anymore.
+    I just kept going because there was no one else."
+    <cite>— Family caregiver, Finland</cite>
+  </blockquote>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how-bg" id="how">
+  <div class="container">
+    <div class="section-label">How MindCarer Works</div>
+    <h2>Clinically designed. Built around your reality.</h2>
+    <p class="lead">
+      Every feature was designed by a clinical psychologist who understands
+      caregiver burnout from the inside out — not from a UX workshop.
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Daily 90-second check-in</h3>
+        <p>Five caregiver-specific questions that track your emotional patterns over time — not generic mood sliders.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Burnout risk score</h3>
+        <p>Our clinically-validated algorithm detects burnout risk patterns 4–6 weeks before crisis — so you can act before you break.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>CBT exercises for caregivers</h3>
+        <p>3-minute evidence-based exercises for guilt, anticipatory grief, role reversal — the feelings you can't explain to others.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <h3>Peer community</h3>
+        <p>Private groups with people who actually understand — organised by care situation: dementia, Parkinson's, end-of-life.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Who This Is For</div>
+    <div class="who-grid">
+      <div>
+        <h2>You're not a professional carer.<br>You're a son, daughter, spouse.</h2>
+        <ul class="who-list">
+          <li>You care for an elderly parent or relative at home</li>
+          <li>You manage caregiving alongside a full-time job</li>
+          <li>You feel the emotional weight no one else sees</li>
+          <li>You've Googled "caregiver burnout" at 2am</li>
+          <li>You want support that actually understands your situation</li>
+          <li>You live in Finland and want something in your language</li>
+        </ul>
+      </div>
+      <div class="who-card">
+        <h3>Built by people who understand</h3>
+        <p>
+          MindCarer was founded by a clinical psychologist and an experienced
+          entrepreneur who have seen caregiver burnout up close. Our clinical
+          co-founder designed every assessment, every exercise, and every
+          alert based on validated psychological frameworks — not best guesses.
+        </p>
+        <div>
+          <span class="tag">Clinical Psychology</span>
+          <span class="tag">GDPR Compliant</span>
+          <span class="tag">Finnish Language</span>
+          <span class="tag">Evidence-Based CBT</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WAITLIST -->
+<section class="waitlist-section" id="waitlist">
+  <div class="container">
+    <div class="section-label" style="color: var(--mist);">Early Access</div>
+    <h2>Be the first to know when MindCarer launches in Finland</h2>
+    <p class="lead">
+      We're launching in 2027. Join the waitlist and help shape the product —
+      early members get founding pricing and direct input into features.
+    </p>
+
+    <div class="waitlist-form" id="form">
+      <input type="email" id="emailInput" placeholder="your@email.com" />
+      <button onclick="handleSubmit()">Join Waitlist</button>
+    </div>
+    <div class="success-msg" id="successMsg">
+      ✓ You're on the list. We'll be in touch as we get closer to launch.
+    </div>
+    <p class="privacy-note">No spam. No sharing your data. Unsubscribe anytime.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="logo">Mind<span style="font-style:italic;color:var(--sage)">Carer</span></span>
+  <p>mindcarer.fi · A clinically-designed mental health platform for family caregivers · Finland · 2027</p>
+</footer>
+
+<script>
+function handleSubmit() {
+  const email = document.getElementById('emailInput').value;
+  if (!email || !email.includes('@')) {
+    document.getElementById('emailInput').style.borderColor = '#E87070';
+    return;
+  }
+  document.getElementById('form').style.display = 'none';
+  document.getElementById('successMsg').style.display = 'block';
+
+  // اگه Google Form داری، اینجا fetch بفرست
+  // fetch('YOUR_GOOGLE_FORM_URL', { method: 'POST', body: ... })
+}
+
+document.getElementById('emailInput').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') handleSubmit();
+});
+</script>
+
+</body>
+</html>
