@@ -743,7 +743,7 @@ async function submitWL() {
   }
   // Formspree submission
   try {
-    await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+    await fetch('https://formspree.io/f/xgawapby', {
       method: 'POST',
       headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, persona: currentPersona, answers, _subject: 'TerraMorrow Waitlist Signup' })
